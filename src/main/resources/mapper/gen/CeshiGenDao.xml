@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmdsoft.modules.gen.dao.CeshiGenDao">
+
+
+    <resultMap type="com.lmdsoft.modules.gen.entity.CeshiGenEntity" id="ceshiGenMap">
+        <result property="id" column="id"/>
+        <result property="value" column="value"/>
+        <result property="name" column="name"/>
+        <result property="type" column="type"/>
+        <result property="title" column="title"/>
+        <result property="createtime" column="createTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id ,
+		value ,
+		name ,
+		type ,
+		title ,
+		createTime 
+    </sql>
+
+	<select id="queryObject" resultType="com.lmdsoft.modules.gen.entity.CeshiGenEntity" resultMap="ceshiGenMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_ceshi_gen
+		where id = #{value}
+
+	</select>
+
+	<select id="queryList" resultType="com.lmdsoft.modules.gen.entity.CeshiGenEntity" resultMap="ceshiGenMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_ceshi_gen
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by  ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit  #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="com.lmdsoft.modules.gen.entity.CeshiGenEntity" resultMap="ceshiGenMap">
+        select
+        <include refid="Base_Column_List" />
+        from sys_ceshi_gen
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sys_ceshi_gen
+	</select>
+	 
+	<insert id="save" parameterType="com.lmdsoft.modules.gen.entity.CeshiGenEntity" useGeneratedKeys="true" keyProperty="id" >
+		insert into sys_ceshi_gen
+		(
+					`id`,
+
+					`value`,
+
+					`name`,
+
+					`type`,
+
+					`title`,
+
+					`createTime`
+
+				)
+				values
+				(
+
+				#{id},
+
+				#{value},
+
+				#{name},
+
+				#{type},
+
+				#{title},
+
+				#{createtime}
+
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.lmdsoft.modules.gen.entity.CeshiGenEntity">
+		update sys_ceshi_gen
+		<set>
+                <if test="value != null">`value` = #{value},</if>
+                <if test="name != null">`name` = #{name},</if>
+                <if test="type != null">`type` = #{type},</if>
+                <if test="title != null">`title` = #{title},</if>
+                <if test="createtime != null">`createTime` = #{createtime}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<delete id="delete">
+		delete from sys_ceshi_gen where id = #{value}
+	</delete>
+
+	<delete id="deleteBatch">
+		delete from sys_ceshi_gen where id in
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+		#{id}
+		</foreach>
+	</delete>
+
+</mapper>
